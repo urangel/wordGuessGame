@@ -4,16 +4,23 @@ var austinThings = ["mountBonnel", "wholeFoods", "bartonSprings", "heb", "grackl
 var alphabet = ("abcdefghijklmnopqrstuvwxyz").split("");
 
 //creats an array consisting of the letters of the mystery word that was chosen at random from the list
-var mysteryWord = (austinThings[Math.floor(Math.random()*austinThings.length)]).split("");
-console.log(mysteryWord);
+var mysteryWordArray = austinThings[Math.floor(Math.random()*austinThings.length)].split("");
+console.log(mysteryWordArray);
 
-var uniqueLetters = mysteryWord.filter(function(item, pos){
-    return mysteryWord.indexOf(item) == pos;
-})
+// checking to see if works with string
+var mysteryWordString = mysteryWordArray.join("").toLocaleLowerCase();
+
+console.log(mysteryWordString);
+
+var uniqueLetters = mysteryWordString.split("").filter(onlyUnique).join("").toLocaleLowerCase();
 
 console.log(uniqueLetters);
 
 var uniqueLower = [];
+
+var wordLeftToGuess = mysteryWordString;
+
+var displayedWord = "";
 
 var guessesLeft = 12;
 
@@ -28,6 +35,7 @@ var wins = 0;
 window.onload = function() {
     document.getElementById("guessesLeft").textContent = guessesLeft;
     document.getElementById("wins").textContent = wins;
+    document.getElementById("mysteryWord").textContent = displayedWord;
 
 }
 
@@ -44,28 +52,40 @@ function winsIncrease() {
 }
 
 function restart() {
-    mysteryWord = (austinThings[Math.floor(Math.random()*austinThings.length)]).split("");
-    console.log(mysteryWord);
+    mysteryWordArray = austinThings[Math.floor(Math.random()*austinThings.length)].split("");
+    mysteryWordString = mysteryWordArray.join("").toLocaleLowerCase();
+    console.log(mysteryWordArray);
+    console.log(mysteryWordString);
     guessesLeft = 12;
+    displayedWord = "";
+    wordLeftToGuess = mysteryWordString;
     lettersCorrect = [];
     lettersWrong = [];
-    document.getElementById("mysteryWord").textContent = "";
+    uniqueLower = [];
+    document.getElementById("mysteryWord").textContent = displayedWord;
     document.getElementById("lettersGuessed").textContent = "";
     document.getElementById("guessesLeft").textContent = guessesLeft;
-    document.getElementById("status").textContent = "Guess what Austin thing this is!";
     alphabet = ("abcdefghijklmnopqrstuvwxyz").split("");
     
-    uniqueLetters = mysteryWord.filter(function(item, pos){
-        return mysteryWord.indexOf(item) == pos;
-    })
+    uniqueLetters = mysteryWordString.split("").filter(onlyUnique).join("").toLocaleLowerCase();
+    console.log(uniqueLetters);
     
     for (i=0; i<uniqueLetters.length; i++){
         uniqueLower.push(uniqueLetters[i].toLowerCase());
     }
     
+    for (i=0; i<mysteryWordArray.length; i++){
+        displayedWord += "-";
+    }
+
     console.log(uniqueLower);
     
 }
+
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
 
 // setting up so that word is only lowercase
 
@@ -73,7 +93,11 @@ for (i=0; i<uniqueLetters.length; i++){
     uniqueLower.push(uniqueLetters[i].toLowerCase());
 }
 
-console.log(uniqueLower);
+// console.log(uniqueLower);
+
+for (i=0; i<mysteryWordArray.length; i++){
+    displayedWord += "-";
+}
 
 // The beginning of user interactivity
 
@@ -87,21 +111,30 @@ document.onkeyup = function(event){
                 alphabet.splice(alphabet.indexOf(userGuess), 1 );
             
                 if (uniqueLower.indexOf(userGuess) >= 0){
-                    // lettersCorrect.push(userGuess); // Need to change this to make the word appear in order so it makes sense
-                    // document.getElementById("mysteryWord").textContent = lettersCorrect;
-                    $("#mysteryWord").html("<p>" + userGuess + "</p>");
-                        if (uniqueLower.indexOf(userGuess) >=0){
-                        uniqueLower.splice(uniqueLetters.indexOf(userGuess), 1);
-                        }    
+                       
+                    // trying to put letters in order and allow for duplicate population
+                    for (i=0; i<mysteryWordString.length; i++){
+                        var position = wordLeftToGuess.indexOf(userGuess);
+
+                        if (position >= 0){
+                            console.log(displayedWord);
+                            displayedWord = displayedWord.substring(0,position) + mysteryWordArray[position] + displayedWord.substring(position+1);
+                            wordLeftToGuess = wordLeftToGuess.substring(0,position) + "-" + wordLeftToGuess.substring(position+1);
+                            console.log(wordLeftToGuess);
+                        }
+                        document.getElementById("mysteryWord").textContent = displayedWord;
+                    }
+                    uniqueLower.splice(uniqueLower.indexOf(userGuess), 1);
+                        
                     console.log(uniqueLower);
                 }
                 else {
-                // adds the user guessed letter *that is wrong* to the array lettersWrong
-                lettersWrong.push(userGuess);
-                document.getElementById("lettersGuessed").textContent = lettersWrong;
-                // gives you one less try because you guessed wrong
-                guessesDecrease();
-                document.getElementById("guessesLeft").textContent = guessesLeft;
+                    // adds the user guessed letter *that is wrong* to the array lettersWrong
+                    lettersWrong.push(userGuess);
+                    document.getElementById("lettersGuessed").textContent = lettersWrong;
+                    // gives you one less try because you guessed wrong
+                    guessesDecrease();
+                    document.getElementById("guessesLeft").textContent = guessesLeft;
                 }
 
             }
@@ -124,6 +157,3 @@ document.onkeyup = function(event){
         restart();
     }    
 }
-//if all of the letters in the mysteryword are guessed then the user wins...
-// need to populate all instances of correct letter if it apppears multiple times in the mysteryWord
-// need to put all correct guesses in the right order to form the word

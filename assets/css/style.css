@@ -1,0 +1,25 @@
+h1 {
+
+}
+
+h2 {
+
+}
+
+h3 {
+
+}
+
+#title {
+    color: darkred;
+    font-family: Roboto;
+}
+
+#mysteryWord {
+    font-size: 10vh;
+}
+
+#lettersGuessed, #wins, #guessesLeft {
+    font-family: Righteous;
+    color: darkred;
+}
