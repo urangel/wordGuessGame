@@ -1,13 +1,23 @@
-h1 {
-
-}
-
-h2 {
-
-}
-
 h3 {
+    color: darkred;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    opacity: .8;
+    font-size: 1em;
+    border: solid darkred 1px;
+    
+}
 
+body, html {
+    height: 100%;
+}
+
+.bg {
+    background-image: url(../images/downtownAustin.jpg);
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #title {
@@ -19,7 +29,13 @@ h3 {
     font-size: 10vh;
 }
 
-#lettersGuessed, #wins, #guessesLeft {
+#lettersGuessed, #wins, #guessesLeft, #losses {
     font-family: Righteous;
     color: darkred;
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 4vh;
+    opacity: .8;
+
 }
