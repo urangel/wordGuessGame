@@ -13,3 +13,5 @@ If you lose your losses will go up by 1 and update on the page.
 If all the letters in the word are guessed then wins will go up by 1 and update on the page.
 
 The user will then be prompted to play again whether they win or lose. 
+
+[Site](https://urangel.github.io/wordGuessGame/)
